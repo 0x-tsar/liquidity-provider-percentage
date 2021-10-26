@@ -8,9 +8,21 @@ contract Provider is ERC20 {
     address admin;
     IERC20 dai;
 
+    mapping(address => uint256) public checkpoint;
+
     constructor(address _dai) ERC20("Liquidity Provider", "LP") {
         admin = msg.sender;
         dai = IERC20(_dai);
+    }
+
+    function addingLiquidity(uint256 _amount) external {
+        require(checkpoint[msg.sender] > 0, "First withdraw your funds");
+        //first approve this contract to use dai
+        dai.transferFrom(msg.sender, address(this), _amount);
+        checkpoint[msg.sender] = block.timestamp;
+
+        //added some percentage to it related to minutes
+        _mint(msg.sender, _amount);
     }
 
     //100 basis points = 1%
