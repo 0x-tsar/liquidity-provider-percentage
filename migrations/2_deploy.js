@@ -7,4 +7,5 @@ module.exports = async (deployer) => {
 
   await deployer.deploy(Provider, dai.address);
   const provider = await Provider.deployed();
+  console.log("contracts deployed.");
 };
